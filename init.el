@@ -168,6 +168,69 @@
   (leaf-handler-package recentf-ext recentf-ext nil)
   :ensure t)
 
+(leaf irony
+  :ensure company
+  :config
+  (leaf-handler-package irony irony nil)
+    (custom-set-variables
+     '(irony-additional-clang-options
+       '("-std=c++17")))
+;    (add-to-list 'company-backends 'company-irony)
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+    (add-hook 'c-mode-common-hook 'irony-mode))
+
+(leaf flycheck
+  :when (version<= "24.3" emacs-version)
+  :ensure t
+  :config
+  (leaf-handler-package flycheck flycheck nil)
+  (when (require 'flycheck nil 'noerror)
+    (custom-set-variables
+     '(flycheck-display-errors-function
+       (lambda (errors)
+	 (let ((messages (mapcar #'flycheck-error-message errors)))
+	   (popup-tip
+	    (mapconcat 'identity messages "\n")))))
+     '(flycheck-display-errors-delay 0.5))
+    (define-key flycheck-mode-map
+      (kbd "C-M-n")
+      'flycheck-next-error)
+    (define-key flycheck-mode-map
+      (kbd "C-M-p")
+      'flycheck-previous-error)
+    (add-hook 'c-mode-common-hook 'flycheck-mode)))
+
+(leaf flycheck-irony
+  :ensure flycheck irony
+  :when (version<= "24.1" emacs-version)
+  :config
+  (leaf-handler-package flycheck-irony flycheck-irony nil)
+    (eval-after-load 'flycheck
+      '(progn
+	 (eval-after-load "flycheck"
+	   '(progn
+	      (when (locate-library "flycheck-irony")
+		(flycheck-irony-setup)))))))
+
+
+(leaf py-isort :ensure t)
+
+
+(leaf elpy
+  :ensure t
+  :init
+  (elpy-enable)
+  :config
+  (remove-hook 'elpy-modules 'elpy-module-highlight-indentation) ;; インデントハイライトの無効化
+  (remove-hook 'elpy-modules 'elpy-module-flymake) ;; flymakeの無効化
+  :custom
+  (elpy-rpc-python-command . "python3") ;; https://mako-note.com/elpy-rpc-python-version/の問題を回避するための設定
+  (flycheck-python-flake8-executable . "flake8")
+  :bind (elpy-mode-map
+         ("C-c C-r f" . elpy-format-code))
+  :hook ((elpy-mode-hook . flycheck-mode))
+
+)
 
 (setq visible-bell 1)
 
@@ -180,18 +243,33 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(company-dabbrev-downcase nil t)
- '(company-idle-delay 0 t)
- '(company-minimum-prefix-length 3 t)
- '(company-selection-wrap-around t t)
- '(company-transformers (quote (company-sort-by-backend-importance)) t)
+ '(company-dabbrev-downcase nil)
+ '(company-idle-delay 0)
+ '(company-minimum-prefix-length 3)
+ '(company-selection-wrap-around t)
+ '(company-transformers (quote (company-sort-by-backend-importance)))
  '(completion-ignore-case t t)
  '(dumb-jump-mode t)
  '(dumb-jump-selector (quote ivy))
  '(dumb-jump-use-visible-window nil)
  '(enable-recursive-minibuffers t)
+ '(flycheck-display-errors-delay 0.5)
+ '(flycheck-display-errors-function
+   (lambda
+     (errors)
+     (let
+	 ((messages
+	   (mapcar
+	    (function flycheck-error-message)
+	    errors)))
+       (popup-tip
+	(mapconcat
+	 (quote identity)
+	 messages "
+")))))
  '(imenu-list-position (quote left) t)
  '(imenu-list-size 30 t)
+ '(irony-additional-clang-options (quote ("-std=c++17")))
  '(ivy-extra-directories nil)
  '(ivy-height 30)
  '(ivy-re-builders-alist (quote ((t . ivy--regex-plus))) t)
