@@ -1,5 +1,6 @@
 *
 !.gitignore
+!custom.el
 !init.el
 !batch.sh
 !README.md
