@@ -34,6 +34,41 @@
   :ensure t
   :bind (("C-c e" . macrostep-expand)))
 
+
+(leaf company
+  :bind (("C-M-i" . company-complete)
+	 (company-active-map
+	  ("C-n" . company-select-next))
+	 (company-active-map
+	  ("C-p" . company-select-previous))
+	 (company-search-map
+	  ("C-n" . company-select-next))
+	 (company-search-map
+	  ("C-p" . company-select-previous))
+	 (company-active-map
+	  ("C-s" . company-filter-candidates))
+	 (company-active-map
+	  ("C-i" . company-complete-selection))
+	 (company-active-map
+	  ([tab]
+	   . company-complete-selection))
+	 (company-active-map
+	  ("C-f" . company-complete-selection))
+	 (emacs-lisp-mode-map
+	  ("C-M-i" . company-complete)))
+  :custom ((company-transformers quote
+			       (company-sort-by-backend-importance))
+	 (company-idle-delay . 0)
+	 (company-minimum-prefix-length . 3)
+	 (company-selection-wrap-around . t)
+	 (completion-ignore-case . t)
+	 (company-dabbrev-downcase))
+  :config  
+  (leaf-handler-package company company nil)
+  (global-company-mode)
+  :ensure t
+  )
+
 (leaf yasnippet
   :ensure t
   :blackout yas-minor-mode
@@ -68,38 +103,7 @@
   ((company-mode-hook . set-yas-as-company-backend))
   )
 
-(leaf company
-  :bind (("C-M-i" . company-complete)
-	 (company-active-map
-	  ("C-n" . company-select-next))
-	 (company-active-map
-	  ("C-p" . company-select-previous))
-	 (company-search-map
-	  ("C-n" . company-select-next))
-	 (company-search-map
-	  ("C-p" . company-select-previous))
-	 (company-active-map
-	  ("C-s" . company-filter-candidates))
-	 (company-active-map
-	  ("C-i" . company-complete-selection))
-	 (company-active-map
-	  ([tab]
-	   . company-complete-selection))
-	 (company-active-map
-	  ("C-f" . company-complete-selection))
-	 (emacs-lisp-mode-map
-	  ("C-M-i" . company-complete)))
-  :custom ((company-transformers quote
-			       (company-sort-by-backend-importance))
-	 (company-idle-delay . 0)
-	 (company-minimum-prefix-length . 3)
-	 (company-selection-wrap-around . t)
-	 (completion-ignore-case . t)
-	 (company-dabbrev-downcase))
-  :config  
-  (leaf-handler-package company company nil)
-  :ensure t
-  )
+
 
 (leaf recentf
   :custom ((recentf-save-file . "~/.emacs.d/.recentf")
