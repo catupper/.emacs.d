@@ -161,6 +161,20 @@
   )
 
 
+(leaf counsel
+  :doc "Various completion functions using Ivy"
+  :req "emacs-24.5" "ivy-0.13.4" "swiper-0.13.4"
+  :tag "tools" "matching" "convenience" "emacs>=24.5"
+  :added "2021-04-20"
+  :url "https://github.com/abo-abo/swiper"
+  :emacs>= 24.5
+  :ensure t
+  :config
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file) ;; find-fileもcounsel任せ！
+  (defvar counsel-find-file-ignore-regexp (regexp-opt '("./" "../")))
+  :after ivy swiper)
+
 (leaf recentf-ext
   :bind (([(super r)]
 	  . counsel-recentf))
@@ -249,6 +263,9 @@
  '(company-selection-wrap-around t)
  '(company-transformers (quote (company-sort-by-backend-importance)))
  '(completion-ignore-case t t)
+ '(custom-safe-themes
+   (quote
+    ("81c3de64d684e23455236abde277cda4b66509ef2c28f66e059aa925b8b12534" default)))
  '(dumb-jump-mode t)
  '(dumb-jump-selector (quote ivy))
  '(dumb-jump-use-visible-window nil)
