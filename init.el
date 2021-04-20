@@ -57,12 +57,12 @@
 	 (emacs-lisp-mode-map
 	  ("C-M-i" . company-complete)))
   :custom ((company-transformers quote
-			       (company-sort-by-backend-importance))
-	 (company-idle-delay . 0)
-	 (company-minimum-prefix-length . 3)
-	 (company-selection-wrap-around . t)
-	 (completion-ignore-case . t)
-	 (company-dabbrev-downcase))
+				 (company-sort-by-backend-importance))
+	   (company-idle-delay . 0)
+	   (company-minimum-prefix-length . 3)
+	   (company-selection-wrap-around . t)
+	   (completion-ignore-case . t)
+	   (company-dabbrev-downcase))
   :config  
   (leaf-handler-package company company nil)
   (global-company-mode)
@@ -107,10 +107,10 @@
 
 (leaf recentf
   :custom ((recentf-save-file . "~/.emacs.d/.recentf")
-	 (recentf-max-saved-items . 200)
-	 (recentf-exclude quote
-			  (".recentf"))
-	 (recentf-auto-cleanup quote never))
+	   (recentf-max-saved-items . 200)
+	   (recentf-exclude quote
+			    (".recentf"))
+	   (recentf-auto-cleanup quote never))
   :config
   (run-with-idle-timer 30 t
 		       '(lambda nil
@@ -124,11 +124,11 @@
 (leaf ivy
   :when (version<= "24.5" emacs-version)
   :custom ((ivy-use-virtual-buffers . t)
-	 (enable-recursive-minibuffers . t)
-	 (ivy-height . 30)
-	 (ivy-extra-directories)
-	 (ivy-re-builders-alist quote
-				((t . ivy--regex-plus))))
+	   (enable-recursive-minibuffers . t)
+	   (ivy-height . 30)
+	   (ivy-extra-directories)
+	   (ivy-re-builders-alist quote
+				  ((t . ivy--regex-plus))))
   :config
   (leaf-handler-package ivy ivy nil)
   (ivy-mode 1)
@@ -141,8 +141,8 @@
   :bind (("M-." . dumb-jump-go)
 	 ("M-]" . dumb-jump-back))
   :custom ((dumb-jump-mode . t)
-	 (dumb-jump-selector quote ivy)
-	 (dumb-jump-use-visible-window))
+	   (dumb-jump-selector quote ivy)
+	   (dumb-jump-use-visible-window))
   :config
   (leaf-handler-package dumb-jump dumb-jump nil)
   :ensure t)
@@ -175,76 +175,106 @@
   (defvar counsel-find-file-ignore-regexp (regexp-opt '("./" "../")))
   :after ivy swiper)
 
+
 (leaf recentf-ext
   :bind (([(super r)]
 	  . counsel-recentf))
   :config
   (leaf-handler-package recentf-ext recentf-ext nil)
-  :ensure t)
+  :ensure counsel)
 
 (leaf irony
   :ensure company
   :config
   (leaf-handler-package irony irony nil)
-    (custom-set-variables
-     '(irony-additional-clang-options
-       '("-std=c++17")))
-;    (add-to-list 'company-backends 'company-irony)
-    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-    (add-hook 'c-mode-common-hook 'irony-mode))
+  (custom-set-variables
+   '(irony-additional-clang-options
+     '("-std=c++17")))
+					;    (add-to-list 'company-backends 'company-irony)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+  (add-hook 'c-mode-common-hook 'irony-mode))
 
 (leaf flycheck
-  :when (version<= "24.3" emacs-version)
-  :ensure t
-  :config
-  (leaf-handler-package flycheck flycheck nil)
-  (when (require 'flycheck nil 'noerror)
-    (custom-set-variables
-     '(flycheck-display-errors-function
-       (lambda (errors)
-	 (let ((messages (mapcar #'flycheck-error-message errors)))
-	   (popup-tip
-	    (mapconcat 'identity messages "\n")))))
-     '(flycheck-display-errors-delay 0.5))
-    (define-key flycheck-mode-map
-      (kbd "C-M-n")
-      'flycheck-next-error)
-    (define-key flycheck-mode-map
-      (kbd "C-M-p")
-      'flycheck-previous-error)
-    (add-hook 'c-mode-common-hook 'flycheck-mode)))
+  :config 
+  (leaf flycheck
+    :when (version<= "24.3" emacs-version)
+    :ensure t
+    :config
+    (leaf-handler-package flycheck flycheck nil)
+    (when (require 'flycheck nil 'noerror)
+      (custom-set-variables
+       '(flycheck-display-errors-function
+	 (lambda (errors)
+	   (let ((messages (mapcar #'flycheck-error-message errors)))
+	     (popup-tip
+	      (mapconcat 'identity messages "\n")))))
+       '(flycheck-display-errors-delay 0.5))
+      (define-key flycheck-mode-map
+	(kbd "C-M-n")
+	'flycheck-next-error)
+      (define-key flycheck-mode-map
+	(kbd "C-M-p")
+	'flycheck-previous-error)
+      (add-hook 'c-mode-common-hook 'flycheck-mode)))
 
-(leaf flycheck-irony
-  :ensure flycheck irony
-  :when (version<= "24.1" emacs-version)
-  :config
-  (leaf-handler-package flycheck-irony flycheck-irony nil)
+  (leaf flycheck-irony
+    :ensure flycheck irony
+    :when (version<= "24.1" emacs-version)
+    :config
+    (leaf-handler-package flycheck-irony flycheck-irony nil)
     (eval-after-load 'flycheck
       '(progn
 	 (eval-after-load "flycheck"
 	   '(progn
 	      (when (locate-library "flycheck-irony")
 		(flycheck-irony-setup)))))))
+  )
 
 
-(leaf py-isort :ensure t)
-
-
-(leaf elpy
-  :ensure t
-  :init
-  (elpy-enable)
+(leaf python
   :config
-  (remove-hook 'elpy-modules 'elpy-module-highlight-indentation) ;; インデントハイライトの無効化
-  (remove-hook 'elpy-modules 'elpy-module-flymake) ;; flymakeの無効化
-  :custom
-  (elpy-rpc-python-command . "python3") ;; https://mako-note.com/elpy-rpc-python-version/の問題を回避するための設定
-  (flycheck-python-flake8-executable . "flake8")
-  :bind (elpy-mode-map
-         ("C-c C-r f" . elpy-format-code))
-  :hook ((elpy-mode-hook . flycheck-mode))
 
-)
+  (leaf py-isort :ensure t)
+
+
+  (leaf elpy
+    :ensure t
+    :init
+    (elpy-enable)
+    :config
+    (remove-hook 'elpy-modules 'elpy-module-highlight-indentation) ;; インデントハイライトの無効化
+    (remove-hook 'elpy-modules 'elpy-module-flymake) ;; flymakeの無効化
+    :custom
+    (elpy-rpc-python-command . "python3") ;; https://mako-note.com/elpy-rpc-python-version/の問題を回避するための設定
+    (flycheck-python-flake8-executable . "flake8")
+    :bind (elpy-mode-map
+	   ("C-c C-r f" . elpy-format-code))
+    :hook ((elpy-mode-hook . flycheck-mode))
+
+    )
+  )
+
+
+(leaf rust
+  :config
+  (leaf rust-mode
+    :doc "A major emacs mode for editing Rust source code"
+    :req "emacs-25.1"
+    :tag "languages" "emacs>=25.1"
+    :added "2021-04-20"
+    :url "https://github.com/rust-lang/rust-mode"
+    :emacs>= 25.1
+    :ensure t)
+  
+  (leaf rustic
+    :doc "Rust development environment"
+    :req "emacs-26.1" "dash-2.13.0" "f-0.18.2" "let-alist-1.0.4" "markdown-mode-2.3" "project-0.3.0" "s-1.10.0" "seq-2.3" "spinner-1.7.3" "xterm-color-1.6"
+    :tag "languages" "emacs>=26.1"
+    :added "2021-04-20"
+    :emacs>= 26.1
+    :ensure t
+    :after markdown-mode project spinner xterm-color)
+  )
 
 (setq visible-bell 1)
 
@@ -298,7 +328,7 @@
      ("gnu" . "https://elpa.gnu.org/packages/"))))
  '(package-selected-packages
    (quote
-    (macrostep leaf-tree leaf-convert leaf-keywords hydra el-get blackout)))
+    (lsp-mode macrostep leaf-tree leaf-convert leaf-keywords hydra el-get blackout)))
  '(recentf-auto-cleanup (quote never) t)
  '(recentf-exclude (quote (".recentf")) t)
  '(recentf-max-saved-items 200 t)
