@@ -160,20 +160,26 @@
   :ensure t
   )
 
-
 (leaf counsel
-  :doc "Various completion functions using Ivy"
-  :req "emacs-24.5" "ivy-0.13.4" "swiper-0.13.4"
-  :tag "tools" "matching" "convenience" "emacs>=24.5"
-  :added "2021-04-20"
-  :url "https://github.com/abo-abo/swiper"
-  :emacs>= 24.5
   :ensure t
+  :when (version<= "24.5" emacs-version)
   :config
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file) ;; find-fileもcounsel任せ！
-  (defvar counsel-find-file-ignore-regexp (regexp-opt '("./" "../")))
-  :after ivy swiper)
+  (leaf-handler-package counsel counsel nil)
+  (with-eval-after-load 'swiper
+    (eval-after-load 'ivy
+      '(progn
+	 (global-set-key
+	  (kbd "M-x")
+	  'counsel-M-x)
+	 (global-set-key
+	  (kbd "C-x C-f")
+	  'counsel-find-file)
+	 (defvar counsel-find-file-ignore-regexp
+	   (regexp-opt
+	    '("./" "../")))
+	 )))
+  (counsel-mode)
+  )
 
 
 (leaf recentf-ext
