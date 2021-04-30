@@ -277,9 +277,12 @@
     :req "emacs-26.1" "dash-2.13.0" "f-0.18.2" "let-alist-1.0.4" "markdown-mode-2.3" "project-0.3.0" "s-1.10.0" "seq-2.3" "spinner-1.7.3" "xterm-color-1.6"
     :tag "languages" "emacs>=26.1"
     :added "2021-04-20"
+    :custom
+    (rustic-lsp-server quote rls)
     :emacs>= 26.1
     :ensure t
-    :after markdown-mode project spinner xterm-color)
+    :hook rust-mode-hook
+    )
   )
 
 (setq visible-bell 1)
@@ -297,13 +300,12 @@
  '(company-idle-delay 0)
  '(company-minimum-prefix-length 3)
  '(company-selection-wrap-around t)
- '(company-transformers (quote (company-sort-by-backend-importance)))
+ '(company-transformers '(company-sort-by-backend-importance))
  '(completion-ignore-case t t)
  '(custom-safe-themes
-   (quote
-    ("81c3de64d684e23455236abde277cda4b66509ef2c28f66e059aa925b8b12534" default)))
+   '("81c3de64d684e23455236abde277cda4b66509ef2c28f66e059aa925b8b12534" default))
  '(dumb-jump-mode t)
- '(dumb-jump-selector (quote ivy))
+ '(dumb-jump-selector 'ivy)
  '(dumb-jump-use-visible-window nil)
  '(enable-recursive-minibuffers t)
  '(flycheck-display-errors-delay 0.5)
@@ -312,38 +314,30 @@
      (errors)
      (let
 	 ((messages
-	   (mapcar
-	    (function flycheck-error-message)
-	    errors)))
+	   (mapcar #'flycheck-error-message errors)))
        (popup-tip
-	(mapconcat
-	 (quote identity)
-	 messages "
+	(mapconcat 'identity messages "
 ")))))
- '(imenu-list-position (quote left) t)
- '(imenu-list-size 30 t)
- '(irony-additional-clang-options (quote ("-std=c++17")))
+ '(imenu-list-position 'left)
+ '(imenu-list-size 30)
+ '(irony-additional-clang-options '("-std=c++17"))
  '(ivy-extra-directories nil)
  '(ivy-height 30)
- '(ivy-re-builders-alist (quote ((t . ivy--regex-plus))) t)
+ '(ivy-re-builders-alist '((t . ivy--regex-plus)) t)
  '(ivy-use-virtual-buffers t)
  '(package-archives
-   (quote
-    (("org" . "https://orgmode.org/elpa/")
+   '(("org" . "https://orgmode.org/elpa/")
      ("melpa" . "https://melpa.org/packages/")
-     ("gnu" . "https://elpa.gnu.org/packages/"))))
+     ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   (quote
-    (lsp-mode macrostep leaf-tree leaf-convert leaf-keywords hydra el-get blackout)))
- '(recentf-auto-cleanup (quote never) t)
- '(recentf-exclude (quote (".recentf")) t)
+   '(lsp-mode macrostep leaf-tree leaf-convert leaf-keywords hydra el-get blackout))
+ '(recentf-auto-cleanup 'never t)
+ '(recentf-exclude '(".recentf") t)
  '(recentf-max-saved-items 200 t)
  '(recentf-save-file "~/.emacs.d/.recentf" t)
  '(yas-global-mode t)
- '(yas-indent-line (quote fixed))
- '(yas-snippet-dirs
-   (quote
-    ("~/.emacs.d/mysnippets" "~/.emacs.d/yasnippets/snippets"))))
+ '(yas-indent-line 'fixed)
+ '(yas-snippet-dirs '("~/.emacs.d/mysnippets" "~/.emacs.d/yasnippets/snippets")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
