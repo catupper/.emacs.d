@@ -277,10 +277,24 @@
     :req "emacs-26.1" "dash-2.13.0" "f-0.18.2" "let-alist-1.0.4" "markdown-mode-2.3" "project-0.3.0" "s-1.10.0" "seq-2.3" "spinner-1.7.3" "xterm-color-1.6"
     :tag "languages" "emacs>=26.1"
     :added "2021-04-20"
+    :hook rust-mode-hook
     :emacs>= 26.1
-    :ensure t
-    :after markdown-mode project spinner xterm-color)
+    :ensure t)
   )
+
+(leaf protobuf-mode
+  :doc "major mode for editing protocol buffers."
+  :tag "languages" "protobuf" "google"
+  :added "2021-04-28"
+  :ensure t)
+
+(leaf yaml-mode
+  :doc "Major mode for editing YAML files"
+  :req "emacs-24.1"
+  :tag "yaml" "data" "emacs>=24.1"
+  :added "2021-04-28"
+  :emacs>= 24.1
+  :ensure t)
 
 (setq visible-bell 1)
 
