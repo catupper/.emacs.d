@@ -160,6 +160,16 @@
   :ensure t
   )
 
+(leaf swiper
+  :doc "Isearch with an overview. Oh, man!"
+  :req "emacs-24.5" "ivy-0.13.4"
+  :tag "matching" "emacs>=24.5"
+  :added "2021-05-01"
+  :url "https://github.com/abo-abo/swiper"
+  :emacs>= 24.5
+  :ensure t
+  :after ivy)
+
 (leaf counsel
   :ensure t
   :when (version<= "24.5" emacs-version)
