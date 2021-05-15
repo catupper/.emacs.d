@@ -370,7 +370,7 @@
  '(yas-indent-line (quote fixed))
  '(yas-snippet-dirs
    (quote
-    ("~/.emacs.d/mysnippets" "~/.emacs.d/yasnippets/snippets"))))
+    ("~/.emacs.d/mysnippets" "~/.emacs.d/yasnippet-snippets"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
