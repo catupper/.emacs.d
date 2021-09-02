@@ -221,7 +221,8 @@
       (define-key flycheck-mode-map
 	(kbd "C-M-p")
 	'flycheck-previous-error)
-      (add-hook 'c-mode-common-hook 'flycheck-mode)))
+      (add-hook 'c-mode-common-hook 'flycheck-mode))
+    (global-flycheck-mode))
 
   (leaf flycheck-irony
     :ensure flycheck irony
@@ -260,6 +261,38 @@
     )
   )
 
+(leaf go-mode
+  :doc "Major mode for the Go programming language"
+  :tag "go" "languages"
+  :added "2021-05-26"
+  :url "https://github.com/dominikh/go-mode.el"
+  :hook ((go-mode-hook . company-go))
+  :config
+  (add-to-list 'exec-path (expand-file-name "/usr/local/go/bin/"))
+  (add-to-list 'exec-path (expand-file-name "/Users/user/dev/go/bin/"))
+  (add-hook 'before-save-hook' 'gofmt-before-save)
+  (local-set-key (kbd "M-.") 'godef-jump)
+  (set (make-local-variable 'company-backends) '(company-go))
+  (setq indent-tabs-mode nil)    ; タブを利用
+  (setq c-basic-offset 4)    ; tabサイズを4にする
+  (setq tab-width 4)
+  :ensure t)
+
+(leaf company-go
+  :doc "company-mode backend for Go (using gocode)"
+  :req "company-0.8.0" "go-mode-1.0.0"
+  :tag "languages"
+  :added "2021-05-26"
+  :ensure t
+  )
+
+(leaf yaml-mode
+  :doc "Major mode for editing YAML files"
+  :req "emacs-24.1"
+  :tag "yaml" "data" "emacs>=24.1"
+  :added "2021-05-17"
+  :emacs>= 24.1
+  :ensure t)
 
 (leaf rust
   :config
@@ -318,8 +351,8 @@
        (popup-tip
 	(mapconcat 'identity messages "
 ")))))
- '(imenu-list-position 'left)
- '(imenu-list-size 30)
+ '(imenu-list-position 'left t)
+ '(imenu-list-size 30 t)
  '(irony-additional-clang-options '("-std=c++17"))
  '(ivy-extra-directories nil)
  '(ivy-height 30)
@@ -330,14 +363,15 @@
      ("melpa" . "https://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(lsp-mode macrostep leaf-tree leaf-convert leaf-keywords hydra el-get blackout))
+   '(terraform-mode lsp-mode macrostep leaf-tree leaf-convert leaf-keywords hydra el-get blackout))
  '(recentf-auto-cleanup 'never t)
  '(recentf-exclude '(".recentf") t)
  '(recentf-max-saved-items 200 t)
  '(recentf-save-file "~/.emacs.d/.recentf" t)
  '(yas-global-mode t)
  '(yas-indent-line 'fixed)
- '(yas-snippet-dirs '("~/.emacs.d/mysnippets" "~/.emacs.d/yasnippets/snippets")))
+ '(yas-snippet-dirs
+   '("~/.emacs.d/mysnippets" "~/.emacs.d/yasnippet-snippets/snippets")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

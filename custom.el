@@ -34,7 +34,7 @@
  '(recentf-save-file "~/.emacs.d/.recentf" t)
  '(yas-snippet-dirs
    (quote
-    ("~/.emacs.d/mysnippets" "~/.emacs.d/yasnippets/snippets")) t))
+    ("~/.emacs.d/mysnippets" "~/.emacs.d/yasnippet-snippets/snippets")) t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
