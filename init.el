@@ -343,12 +343,13 @@
  '(company-idle-delay 0)
  '(company-minimum-prefix-length 3)
  '(company-selection-wrap-around t)
- '(company-transformers '(company-sort-by-backend-importance))
+ '(company-transformers (quote (company-sort-by-backend-importance)))
  '(completion-ignore-case t t)
  '(custom-safe-themes
-   '("81c3de64d684e23455236abde277cda4b66509ef2c28f66e059aa925b8b12534" default))
+   (quote
+    ("81c3de64d684e23455236abde277cda4b66509ef2c28f66e059aa925b8b12534" default)))
  '(dumb-jump-mode t)
- '(dumb-jump-selector 'ivy)
+ '(dumb-jump-selector (quote ivy))
  '(dumb-jump-use-visible-window nil)
  '(enable-recursive-minibuffers t)
  '(flycheck-display-errors-delay 0.5)
@@ -357,31 +358,38 @@
      (errors)
      (let
 	 ((messages
-	   (mapcar #'flycheck-error-message errors)))
+	   (mapcar
+	    (function flycheck-error-message)
+	    errors)))
        (popup-tip
-	(mapconcat 'identity messages "
+	(mapconcat
+	 (quote identity)
+	 messages "
 ")))))
- '(imenu-list-position 'left t)
+ '(imenu-list-position (quote left) t)
  '(imenu-list-size 30 t)
- '(irony-additional-clang-options '("-std=c++17"))
+ '(irony-additional-clang-options (quote ("-std=c++17")))
  '(ivy-extra-directories nil)
  '(ivy-height 30)
- '(ivy-re-builders-alist '((t . ivy--regex-plus)) t)
+ '(ivy-re-builders-alist (quote ((t . ivy--regex-plus))) t)
  '(ivy-use-virtual-buffers t)
  '(package-archives
-   '(("org" . "https://orgmode.org/elpa/")
+   (quote
+    (("org" . "https://orgmode.org/elpa/")
      ("melpa" . "https://melpa.org/packages/")
-     ("gnu" . "https://elpa.gnu.org/packages/")))
+     ("gnu" . "https://elpa.gnu.org/packages/"))))
  '(package-selected-packages
-   '(terraform-mode lsp-mode macrostep leaf-tree leaf-convert leaf-keywords hydra el-get blackout))
- '(recentf-auto-cleanup 'never t)
- '(recentf-exclude '(".recentf") t)
+   (quote
+    (terraform-mode lsp-mode macrostep leaf-tree leaf-convert leaf-keywords hydra el-get blackout)))
+ '(recentf-auto-cleanup (quote never) t)
+ '(recentf-exclude (quote (".recentf")) t)
  '(recentf-max-saved-items 200 t)
  '(recentf-save-file "~/.emacs.d/.recentf" t)
  '(yas-global-mode t)
- '(yas-indent-line 'fixed)
+ '(yas-indent-line (quote fixed))
  '(yas-snippet-dirs
-   '("~/.emacs.d/mysnippets" "~/.emacs.d/yasnippet-snippets/snippets")))
+   (quote
+    ("~/.emacs.d/mysnippets" "~/.emacs.d/yasnippet-snippets/snippets"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
