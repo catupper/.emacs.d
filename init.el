@@ -309,6 +309,8 @@
   :emacs>= 24.1
   :ensure t)
 
+
+
 (setq visible-bell 1)
 
 (provide 'init)
@@ -361,7 +363,7 @@
      ("gnu" . "https://elpa.gnu.org/packages/"))))
  '(package-selected-packages
    (quote
-    (lsp-mode macrostep leaf-tree leaf-convert leaf-keywords hydra el-get blackout)))
+    (go-mode lsp-mode macrostep leaf-tree leaf-convert leaf-keywords hydra el-get blackout)))
  '(recentf-auto-cleanup (quote never) t)
  '(recentf-exclude (quote (".recentf")) t)
  '(recentf-max-saved-items 200 t)
